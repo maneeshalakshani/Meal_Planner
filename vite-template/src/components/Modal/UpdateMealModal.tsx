@@ -25,7 +25,7 @@ export function UpdateMealModal({meal}: any) {
         "preference": preference,
         "ingredientName": Ingredients,
         "instructions": instructions,
-        "info": info !== null,
+        "info": info,
         "portion": portion,
       }
       updateMealPlan(meal.planId, mealPlan)

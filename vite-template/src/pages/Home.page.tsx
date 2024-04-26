@@ -19,8 +19,11 @@ export function HomePage() {
     {
       localStorage.getItem('isLogged') == 'true' 
         ? <Grid>
-        <Grid.Col span={7} >
+        {/* <Grid.Col span={7} style={{'position': "absolute", "left": "100px","background": "red"}}>
           <ShowAllMeals />
+        </Grid.Col> */}
+        <Grid.Col span={7} style={{'position': "absolute", "left": "500px"}}>
+          <ShowAllMeals navLocation={''} />
         </Grid.Col>
       </Grid>
       : moveToLogin()

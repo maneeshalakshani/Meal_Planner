@@ -5,7 +5,7 @@ import { BadgeCard } from '@/components/Card/Card';
 import { Stack } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
-export function ShowAllMeals() {
+export function ShowAllMeals({navLocation}:any) {
   const [items, setItems] = useState([1]);
   const [plans, setPlans] = useState([]);
 
@@ -35,6 +35,8 @@ export function ShowAllMeals() {
                     planId={item.planId}
                     setPlans={setPlans}
                     mealPlan={item}
+                    navLocation={navLocation}
+                    ownerId={item.ownerId}
                 />
             </div>
         ))}

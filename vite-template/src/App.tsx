@@ -10,7 +10,7 @@ export default function App() {
       return <></>;
     }else{
       return <>
-        <Grid.Col span="content">
+        <Grid.Col span="content" style={{'position': "fixed"}}>
           <NavbarMinimal />
         </Grid.Col>
       </>;
@@ -21,7 +21,7 @@ export default function App() {
     <MantineProvider theme={theme}>
       <Grid>
       {checkNav()}
-      <Grid.Col span={11} >
+      <Grid.Col span={11} mt={30} mb={50}>
         <Router />
       </Grid.Col>
     </Grid>

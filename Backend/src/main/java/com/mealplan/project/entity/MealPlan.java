@@ -36,6 +36,9 @@ public class MealPlan {
     @Column(name="Image")
     String image;
 
+    @Column(name="Owner")
+    String ownerId;
+
 //    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL)
 //    private List<Comment> comments;
 
@@ -51,6 +54,14 @@ public class MealPlan {
         this.portion = portion;
         this.info = info;
         this.image = image;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public void setPlanId(int planId) {

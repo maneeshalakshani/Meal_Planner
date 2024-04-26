@@ -46,12 +46,14 @@ public class MealPlanController {
             @RequestParam(value="ingredientName", required = false) String ingredientName,
             @RequestParam(value="instructions", required = false) String instructions,
             @RequestParam(value="info", required = false) String info,
-            @RequestParam(value="portion", required = false) String portion
+            @RequestParam(value="portion", required = false) String portion,
+            @RequestParam(value="ownerId", required = false) String userId
     ) throws IOException{
         MealPlan meal = new MealPlan();
         meal.setPortion(Integer.parseInt(portion));
         meal.setPlanName(planName);
         meal.setPreference(preference);
+        meal.setOwnerId(userId);
         ArrayList<String> ingredientsArr = new ArrayList<>(Arrays.asList(ingredientName.replace("[","").replace("]","").split(",")));
         meal.setIngredientName(ingredientsArr);
         ArrayList<String> instructionArr = new ArrayList<>(Arrays.asList(instructions.replace("[","").replace("]","").split(",")));
@@ -73,6 +75,19 @@ public class MealPlanController {
         return this.mealPlanServiceService.getAll();
     }
 
+    @GetMapping("/getAllByUser/{userId}")
+    public List<MealPlan> getAllByUser(@PathVariable("userId") String userId){
+        List<MealPlan> mealPlans = this.mealPlanServiceService.getAll();
+        List<MealPlan> requestedUserPlans = new ArrayList<>();
+
+        for(MealPlan mp : mealPlans){
+            if(Integer.parseInt(mp.getOwnerId()) == Integer.parseInt(userId)){
+                requestedUserPlans.add(mp);
+            }
+        }
+        return requestedUserPlans;
+    }
+
     //get a travel guide from guide id
     @GetMapping("/get/{id}")
     public MealPlan getById(@PathVariable("id") int id){
@@ -89,12 +104,14 @@ public class MealPlanController {
             @RequestParam(value="ingredientName", required = false) String ingredientName,
             @RequestParam(value="instructions", required = false) String instructions,
             @RequestParam(value="info", required = false) String info,
-            @RequestParam(value="portion", required = false) String portion
+            @RequestParam(value="portion", required = false) String portion,
+            @RequestParam(value="userId", required = false) String userId
     ) throws IOException{
         MealPlan meal = new MealPlan();
         meal.setPortion(Integer.parseInt(portion));
         meal.setPlanName(planName);
         meal.setPreference(preference);
+        meal.setOwnerId(userId);
         ArrayList<String> ingredientsArr = new ArrayList<>(Arrays.asList(ingredientName.replace("[","").replace("]","").split(",")));
         meal.setIngredientName(ingredientsArr);
         ArrayList<String> instructionArr = new ArrayList<>(Arrays.asList(instructions.replace("[","").replace("]","").split(",")));

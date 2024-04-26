@@ -31,6 +31,7 @@ export function AddMeal() {
         "instructions": "[" + instructions + "]",
         "info": info,
         "portion": portion,
+        "ownerId": localStorage.getItem('userId'),
     }
 
     addMealPlan(mealPlan);

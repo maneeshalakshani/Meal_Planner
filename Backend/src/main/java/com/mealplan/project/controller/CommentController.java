@@ -96,7 +96,7 @@ public class CommentController {
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id){
         this.commentService.delete(id);
-        return "guide deleted";
+        return "Deleted";
     }
 }
 

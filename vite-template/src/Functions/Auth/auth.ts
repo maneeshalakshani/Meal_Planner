@@ -18,6 +18,7 @@ export const login = async (email:string, password:string) => {
       let user = res.data;
       if(user.password == password){
         localStorage.setItem('isLogged', 'true');
+        localStorage.setItem('userId', user.userId);
         window.location.href = "http://localhost:5173/";
       }else{
         alert("Error")

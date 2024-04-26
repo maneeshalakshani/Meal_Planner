@@ -1,53 +1,57 @@
-import { Welcome } from '../components/Welcome/Welcome';
-import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
-import { NavbarMinimal } from '@/components/NavBar/NavBar';
-import { BadgeCard } from '@/components/Card/Card';
-
-import { Center, Grid, Stack, Title } from '@mantine/core';
-import { useState } from 'react';
+import { Center, Grid, Group, Stack, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { ImagePicker } from '@/components/ImagePicker/ImagePicker';
 import { TextInputField } from '@/components/Input/TextInput';
 import { Dropdown } from '@/components/Input/Dropdown';
 import { TextAreaField } from '@/components/Input/TextArea';
 import { NormalButton } from '@/components/buttons/Button';
-import { addMealPlan } from '@/Functions/Meal/meal';
+import { addMealPlan, getAllMealPlansByUser } from '@/Functions/Meal/meal';
+import { getUserWithId } from '@/Functions/User/user';
+import { BadgeCard } from '@/components/Card/Card';
 
 export function Profile() {
-  const [items, setItems] = useState([1,2]);
-  const [name, setName] = useState();
-  const [preference, setPreference] = useState();
-  const [portion, setPortion] = useState();
-  const [info, setInfo] = useState();
-  const [Ingredients, setIngredients] = useState();
-  const [instructions, setInstructions] = useState();
-  const [image, setImage] = useState();
+  const [user, setUser] = useState(null);
+  const [name, setName] = useState(null);
+  const [plans, setPlans] = useState([]);
 
-  const onSubmit = () => {
-    const mealPlan = {
-        "photo": image,
-        "planName": name,
-        "preference": preference,
-        "ingredientName": "[" + Ingredients + "]",
-        "instructions": "[" + instructions + "]",
-        "info": info,
-        "portion": portion,
+  useEffect(() => {
+    fetchData();
+  }, []); 
+
+  const fetchData = async () => {
+    try {
+      const data = await getUserWithId(localStorage.getItem('userId'));
+      setUser(data);
+      setName(data.name)
+
+      const plan = await getAllMealPlansByUser(localStorage.getItem('userId'));
+      setPlans(plan);
+    } catch (error) {
+      console.error('Error fetching :', error);
     }
-
-    addMealPlan(mealPlan);
-  }
+  };
   
   return (
-    <Center mt={70} mb={100}>
+    <Center mt={50} mb={100}>
         <Stack>
-            <Title>Add Meal Planner</Title>
-            <TextInputField label={"Plan Name"} value={name} setValue={setName} />
-            <TextInputField label={"Portion"} value={portion} setValue={setPortion} />
-            <TextAreaField label={"Information"} value={info} setValue={setInfo} />
-            <TextAreaField label={"Ingredients"} value={Ingredients} setValue={setIngredients} description={"separate with a comma"} />
-            <TextAreaField label={"instructions"} value={instructions} setValue={setInstructions} description={"separate with a comma"} />
-            <Dropdown label={"Preference"} value={preference} setValue={setPreference} />
-            <ImagePicker setValue={setImage} />
-            <NormalButton label={"Submit"} onClick={onSubmit} />
+            <Title>{name}</Title>
+            <Group style={{'position': 'absolute', 'left': '200px', 'top': '150px'}}>
+            {plans.map((item:any, index) => (
+                    <BadgeCard 
+                      key={index}
+                        image={item.image} 
+                        title={item.planName} 
+                        instructions={item.instructions} 
+                        ingredients={item.ingredientName} 
+                        preference={item.preference} 
+                        planId={item.planId}
+                        setPlans={setPlans}
+                        mealPlan={item}
+                        navLocation={'profile'}
+                        ownerId={item.ownerId}
+                    />
+            ))}
+            </Group>
         </Stack>
     </Center>
   );

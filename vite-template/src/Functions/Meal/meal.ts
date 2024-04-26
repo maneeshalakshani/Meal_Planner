@@ -23,10 +23,11 @@ export const getAllMealPlans = async () => {
     return mealPlans;
 }
 
-export const deletePlan = async (id:any) => {
+export const deletePlan = async (id:any, navLocation:any) => {
     try{
         await axios.delete(`http://localhost:8070/meal/delete/${id}`).then((res) => {
             alert("Successfully Deleted")
+            window.location.href = `http://localhost:5173/${navLocation}`;
         })
     }catch(err){
         console.log("Error", err)
@@ -38,7 +39,7 @@ export const updateMealPlan = async (id:any, plan:any) => {
         headers: {'Content-type': 'multipart/form-data'} 
     }).then((res) => {
         alert("Updated Sucessfully");
-        // window.location.href = '../admin-viewAllTaxis'
+        window.location.href = "http://localhost:5173/";
     }).catch(err => {
         console.log("Error: ", err)
     })
@@ -53,4 +54,14 @@ export const getCommentsWithPlan = async (id:any) => {
         console.log('Error: ', err)
     })
     return comments;
+}
+
+export const getAllMealPlansByUser = async (userId:any) => {
+    let mealPlans = axios.get(`http://localhost:8070/meal/getAllByUser/${userId}`).then((res) => {
+        let allPlans = res.data;
+        return allPlans;
+    }).catch((err) => {
+        console.log('Error: ', err)
+    })
+    return mealPlans;
 }
