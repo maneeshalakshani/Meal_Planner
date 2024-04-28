@@ -10,6 +10,9 @@ import {
   IconSettings,
   IconLogout,
   IconSwitchHorizontal,
+  IconUserCircle,
+  IconInputAi,
+  IconPlus,
 } from '@tabler/icons-react';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import classes from './NavBar.module.css';
@@ -39,9 +42,9 @@ function NavbarLink({ icon: Icon, label, active, onClick, url }: NavbarLinkProps
 
 const mockdata = [
   { icon: IconHome2, label: 'Home', url: '/' },
-  { icon: IconGauge, label: 'Add Meal Plans', url: '/addMeal' },
-  { icon: IconDeviceDesktopAnalytics, label: 'User Profile', url: '/profile' },
-//   { icon: IconCalendarStats, label: 'Releases' },
+  { icon: IconPlus, label: 'Add Meal Plans', url: '/addMeal' },
+  { icon: IconUserCircle, label: 'User Profile', url: `/user/${localStorage.getItem('userId')}` },
+  { icon: IconUser, label: 'See Users', url:'/users' },
 //   { icon: IconUser, label: 'Account' },
 //   { icon: IconFingerprint, label: 'Security' },
 //   { icon: IconSettings, label: 'Settings' },

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mealplan.project.entity.CustomReturn;
 import com.mealplan.project.entity.User;
 import com.mealplan.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,17 +62,32 @@ public class UserController {
 
     //update a travel guide
     @PutMapping("/update/{id}")
-    public User update(
+    public CustomReturn update(
             @PathVariable("id") int id,
             @RequestParam(value = "follower",required = false) String followerId
-    ) throws IOException{
-        List<String> followerList = new ArrayList<>();
+    ){
+
         User user = this.userService.getById(id);
+        List<String> currentFollowers = user.getFollower();
+        boolean alreadyFollowed = false;
 
-        followerList.add(followerId);
-        user.setFollower(followerList);
+        for(String f : currentFollowers){
+            if(Integer.parseInt(f) == Integer.parseInt(followerId)){
+                alreadyFollowed = true;
+            }
+        }
+        if(!alreadyFollowed){
+            currentFollowers.add(followerId);
+            user.setFollower(currentFollowers);
+            User updatedUser = this.userService.update(id, user);
+            return new CustomReturn("Followed", updatedUser);
 
-        return this.userService.update(id, user);
+        }else{
+            currentFollowers.remove(followerId);
+            user.setFollower(currentFollowers);
+            User updatedUser = this.userService.update(id, user);
+            return new CustomReturn("Unfollowed", updatedUser);
+        }
     }
 
     //delete a travel guide from id
