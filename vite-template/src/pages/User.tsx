@@ -11,6 +11,7 @@ export function User() {
   const [name, setName] = useState(null);
   const [plans, setPlans] = useState([]);
   const [followers, setFollowers] = useState([]);
+  const [likes, setLikes] = useState(0);
 
   const { id } = useParams();
 
@@ -61,8 +62,10 @@ export function User() {
                         planId={item.planId}
                         setPlans={setPlans}
                         mealPlan={item}
-                        navLocation={'profile'}
+                        navLocation={`user/${localStorage.getItem('userId')}`}
                         ownerId={item.ownerId}
+                        likes={item.postlikedusers.length}
+                        setLikes={setLikes}
                     />
             ))}
             </Group>

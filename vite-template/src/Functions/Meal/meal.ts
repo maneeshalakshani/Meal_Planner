@@ -65,3 +65,16 @@ export const getAllMealPlansByUser = async (userId:any) => {
     })
     return mealPlans;
 }
+
+export const updatePlanLikes = async (id:any, likedUser:any, postOwnerId:any) => {
+    let updatedLikes = await axios.put(`http://localhost:8070/meal/updateLikes/${id}`, likedUser, {
+        headers: {'Content-type': 'multipart/form-data'} 
+    }).then((res) => {
+        window.location.href = `http://localhost:5173/user/${postOwnerId}`;
+        let updatedPostLikes = res.data.postlikedusers;
+        return updatedPostLikes;
+    }).catch(err => {
+        console.log("Error: ", err)
+    })
+    return updatedLikes;
+}

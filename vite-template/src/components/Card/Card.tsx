@@ -1,13 +1,13 @@
 import { IconHeart } from '@tabler/icons-react';
-import { Card, Image, Text, Group, Badge, Button, ActionIcon } from '@mantine/core';
+import { Card, Image, Text, Group, Badge, ActionIcon } from '@mantine/core';
 import classes from './Card.module.css';
 import { NormalButton } from '../buttons/Button';
-import { deletePlan, getAllMealPlans } from '@/Functions/Meal/meal';
+import { deletePlan, getAllMealPlans, updatePlanLikes } from '@/Functions/Meal/meal';
 import { UpdateMealModal } from '../Modal/UpdateMealModal';
 import { CommentModal } from '../Modal/Comment/commentModal';
+import imageSrc from '../../assets/1e2bb6bb-e01a-49b4-a013-c7cf6c5d0ecd.png';
 
-export function BadgeCard({image, title, instructions, ingredients, preference, planId, setPlans, mealPlan, navLocation, ownerId}: any) {
-
+export function BadgeCard({image, title, instructions, ingredients, preference, planId, setPlans, mealPlan, navLocation, ownerId, likes, setLikes}: any) {
   const deleteMealPlan = async () => {
     deletePlan(planId, navLocation)
 
@@ -15,11 +15,20 @@ export function BadgeCard({image, title, instructions, ingredients, preference, 
     setPlans(data);
   }
 
+  const updateMealPlanLikes = async () => {
+    const likedUser = { "likedUser" : localStorage.getItem('userId') }
+    let data: string[] = await updatePlanLikes(planId, likedUser, ownerId)
+    setLikes(data.length)
+  }
 
   return (
     <Card withBorder radius="md" p="md" className={classes.card}>
       <Card.Section>
-        <Image src={"https://www.bhf.org.uk/-/media/images/information-support/heart-matters/2022/january-2022/nutrition/meal_plan_620x400-ss-no-exp.png?rev=d0c796f2ba954a8ea01049dea62bf6ad"} alt={title} height={180} />
+        <Image 
+          src={imageSrc} 
+          alt={title} 
+          height={180} 
+        />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">
@@ -46,9 +55,10 @@ export function BadgeCard({image, title, instructions, ingredients, preference, 
         <CommentModal mealPlanId={mealPlan.planId} />
         {localStorage.getItem('userId') == ownerId ? <NormalButton label={"Delete"} bgColor={'red'} onClick={() => deleteMealPlan()}/> : null}
         {localStorage.getItem('userId') == ownerId ? <UpdateMealModal meal={mealPlan} /> : null}
-        <ActionIcon variant="default" radius="md" size={36}>
+        <ActionIcon variant="default" radius="md" size={36} onClick={() => updateMealPlanLikes()}>
           <IconHeart className={classes.like} stroke={1.5} />
         </ActionIcon>
+        <Text>{likes}</Text>
       </Group>
     </Card>
   );

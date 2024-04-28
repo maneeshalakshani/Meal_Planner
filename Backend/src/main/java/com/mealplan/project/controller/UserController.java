@@ -81,7 +81,6 @@ public class UserController {
             user.setFollower(currentFollowers);
             User updatedUser = this.userService.update(id, user);
             return new CustomReturn("Followed", updatedUser);
-
         }else{
             currentFollowers.remove(followerId);
             user.setFollower(currentFollowers);

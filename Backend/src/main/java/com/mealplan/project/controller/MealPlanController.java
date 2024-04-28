@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mealplan.project.entity.Comment;
+import com.mealplan.project.entity.CustomReturn;
 import com.mealplan.project.entity.MealPlan;
 import com.mealplan.project.service.CommentService;
 import com.mealplan.project.service.MealPlanService;
@@ -59,6 +59,7 @@ public class MealPlanController {
         ArrayList<String> instructionArr = new ArrayList<>(Arrays.asList(instructions.replace("[","").replace("]","").split(",")));
         meal.setInstructions(instructionArr);
         meal.setInfo(info);
+        meal.setPostlikedusers(null);
 //        meal.setComment(null);
 
         String filePath = this.mealPlanServiceService.uploadImage(path, image);
@@ -105,7 +106,8 @@ public class MealPlanController {
             @RequestParam(value="instructions", required = false) String instructions,
             @RequestParam(value="info", required = false) String info,
             @RequestParam(value="portion", required = false) String portion,
-            @RequestParam(value="userId", required = false) String userId
+            @RequestParam(value="userId", required = false) String userId,
+            @RequestParam(value="postLikeUsers", required = false) String postLikeUsers
     ) throws IOException{
         MealPlan meal = new MealPlan();
         meal.setPortion(Integer.parseInt(portion));
@@ -116,13 +118,40 @@ public class MealPlanController {
         meal.setIngredientName(ingredientsArr);
         ArrayList<String> instructionArr = new ArrayList<>(Arrays.asList(instructions.replace("[","").replace("]","").split(",")));
         meal.setInstructions(instructionArr);
+        ArrayList<String> postLikedUsersList = new ArrayList<>(Arrays.asList(postLikeUsers.replace("[","").replace("]","").split(",")));
+        meal.setPostlikedusers(postLikedUsersList);
         meal.setInfo(info);
 
         String filePath = this.mealPlanServiceService.uploadImage(path, image);
-//        filePath = "../../".concat(filePath.substring(filePath.lastIndexOf("assets/")));
         filePath = filePath.replace("\\", "");
 
         meal.setImage(filePath);
+
+        return this.mealPlanServiceService.update(id, meal);
+    }
+
+    @PutMapping("/updateLikes/{id}")
+    public MealPlan updatePlanLikes(
+            @PathVariable("id") int id,
+            @RequestParam(value = "likedUser",required = false) String likedUser
+    ) throws IOException{
+        MealPlan meal = mealPlanServiceService.getById(id);
+        boolean alreadyLiked = false;
+        List<String> likedUsers = meal.getPostlikedusers();
+
+        for(String lu : likedUsers){
+            if(Integer.parseInt(lu) == Integer.parseInt(likedUser)){
+                alreadyLiked = true;
+            }
+        }
+
+        if(!alreadyLiked){
+            likedUsers.add(likedUser);
+            meal.setPostlikedusers(likedUsers);
+        }else{
+            likedUsers.remove(likedUser);
+            meal.setPostlikedusers(likedUsers);
+        }
 
         return this.mealPlanServiceService.update(id, meal);
     }

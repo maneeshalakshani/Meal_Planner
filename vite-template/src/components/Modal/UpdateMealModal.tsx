@@ -17,6 +17,8 @@ export function UpdateMealModal({meal}: any) {
   const [Ingredients, setIngredients] = useState(meal.ingredientName);
   const [instructions, setInstructions] = useState(meal.instructions);
   const [image, setImage] = useState(meal.image);
+  const [postlikedusers, setPostlikedusers] = useState(meal.postlikedusers);
+  const [ownerId, setOwnerId] = useState(meal.ownerId);
 
     const onSubmit = () => {
       const mealPlan = {
@@ -27,6 +29,8 @@ export function UpdateMealModal({meal}: any) {
         "instructions": instructions,
         "info": info,
         "portion": portion,
+        "postLikeUsers": postlikedusers,
+        "userId": ownerId
       }
       updateMealPlan(meal.planId, mealPlan)
     }

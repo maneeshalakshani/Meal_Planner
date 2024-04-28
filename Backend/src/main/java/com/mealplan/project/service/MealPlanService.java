@@ -47,6 +47,7 @@ public class MealPlanService {
         g.setPortion(plan.getPortion());
         g.setInfo(plan.getInfo());
         g.setImage(plan.getImage());
+        g.setPostlikedusers(plan.getPostlikedusers());
 
         return this.mealPlanRepository.save(g);
     }

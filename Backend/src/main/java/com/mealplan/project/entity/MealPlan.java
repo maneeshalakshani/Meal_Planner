@@ -39,8 +39,10 @@ public class MealPlan {
     @Column(name="Owner")
     String ownerId;
 
-//    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL)
-//    private List<Comment> comments;
+    @ElementCollection
+    @CollectionTable(name = "post_likes")
+    @Column(name = "post_liked_users")
+    List<String> postlikedusers;
 
     public MealPlan(){
         super();
@@ -54,6 +56,14 @@ public class MealPlan {
         this.portion = portion;
         this.info = info;
         this.image = image;
+    }
+
+    public List<String> getPostlikedusers() {
+        return postlikedusers;
+    }
+
+    public void setPostlikedusers(List<String> postlikedusers) {
+        this.postlikedusers = postlikedusers;
     }
 
     public String getOwnerId() {
